@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Approved Placement Drives</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Company</th>
+            <th>Job Title</th>
+            <th>Description</th>
+            <th>Eligibility</th>
+            <th>Deadline</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for drive in drives %}
+        <tr>
+            <td>{{ drive.company.company_name }}</td>
+            <td>{{ drive.job_title }}</td>
+            <td>{{ drive.description }}</td>
+            <td>{{ drive.eligibility }}</td>
+            <td>{{ drive.deadline }}</td>
+            <td>
+                {% if drive.id in applied_ids %}
+                <span class="badge bg-secondary">Applied</span>
+                {% else %}
+                <form action="{{ url_for('student.apply_drive', id=drive.id) }}" method="POST">
+                    <button type="submit" class="btn btn-primary btn-sm">Apply</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

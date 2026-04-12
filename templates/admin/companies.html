@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Manage Companies</h2>
+<form method="GET" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Search by company name" value="{{ search }}">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Company Name</th>
+            <th>Email</th>
+            <th>HR Contact</th>
+            <th>Website</th>
+            <th>Approved</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for company in companies %}
+        <tr>
+            <td>{{ company.user_id }}</td>
+            <td>{{ company.company_name }}</td>
+            <td>{{ company.user.email }}</td>
+            <td>{{ company.hr_contact }}</td>
+            <td>{{ company.website }}</td>
+            <td>{{ 'Yes' if company.approved else 'No' }}</td>
+            <td>{{ 'Active' if company.user.is_active else 'Inactive' }}</td>
+            <td>
+                {% if not company.approved and company.user.is_active %}
+                <form action="{{ url_for('admin.approve_company', id=company.user_id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                </form>
+                <form action="{{ url_for('admin.reject_company', id=company.user_id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Reject and delete this company?')">Reject</button>
+                </form>
+                {% endif %}
+                {% if company.user.is_active %}
+                <form action="{{ url_for('admin.blacklist_company', id=company.user_id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-warning btn-sm" onclick="return confirm('Blacklist this company?')">Blacklist</button>
+                </form>
+                {% else %}
+                <span class="text-muted">Blacklisted</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

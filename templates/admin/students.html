@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Manage Students</h2>
+<form method="GET" class="mb-3">
+    <div class="input-group">
+        <input type="text" name="search" class="form-control" placeholder="Search by name, email, or contact" value="{{ search }}">
+        <button class="btn btn-primary" type="submit">Search</button>
+    </div>
+</form>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Email</th>
+            <th>Contact</th>
+            <th>Resume</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for student in students %}
+        <tr>
+            <td>{{ student.user_id }}</td>
+            <td>{{ student.name }}</td>
+            <td>{{ student.user.email }}</td>
+            <td>{{ student.contact }}</td>
+            <td>{% if student.resume_path %}<a href="{{ url_for('static', filename='uploads/resumes/' + student.resume_path) }}" target="_blank">View</a>{% endif %}</td>
+            <td>{{ 'Active' if student.user.is_active else 'Inactive' }}</td>
+            <td>
+                {% if student.user.is_active %}
+                <form action="{{ url_for('admin.blacklist_student', id=student.user_id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('Blacklist this student?')">Blacklist</button>
+                </form>
+                {% else %}
+                <span class="text-muted">Blacklisted</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

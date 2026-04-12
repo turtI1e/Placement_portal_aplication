@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>All Applications</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Student</th>
+            <th>Company</th>
+            <th>Job Title</th>
+            <th>Applied On</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.student.name }} ({{ app.student.user.email }})</td>
+            <td>{{ app.drive.company.company_name }}</td>
+            <td>{{ app.drive.job_title }}</td>
+            <td>{{ app.application_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ app.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

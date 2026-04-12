@@ -1,0 +1,42 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Manage Placement Drives</h2>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Company</th>
+            <th>Job Title</th>
+            <th>Deadline</th>
+            <th>Status</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for drive in drives %}
+        <tr>
+            <td>{{ drive.id }}</td>
+            <td>{{ drive.company.company_name }}</td>
+            <td>{{ drive.job_title }}</td>
+            <td>{{ drive.deadline }}</td>
+            <td>{{ drive.status }}</td>
+            <td>
+                {% if drive.status == 'pending' %}
+                <form action="{{ url_for('admin.approve_drive', id=drive.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-success btn-sm">Approve</button>
+                </form>
+                <form action="{{ url_for('admin.reject_drive', id=drive.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-danger btn-sm">Reject</button>
+                </form>
+                {% endif %}
+                {% if drive.status == 'approved' %}
+                <form action="{{ url_for('admin.close_drive', id=drive.id) }}" method="POST" style="display:inline;">
+                    <button type="submit" class="btn btn-warning btn-sm">Close</button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

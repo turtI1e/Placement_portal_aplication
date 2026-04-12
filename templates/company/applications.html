@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>Applications for {{ drive.job_title }}</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Student Name</th>
+            <th>Applied On</th>
+            <th>Status</th>
+            <th>Resume</th>
+            <th>Update Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.student.name }}</td>
+            <td>{{ app.application_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ app.status }}</td>
+            <td>{% if app.student.resume_path %}<a href="{{ url_for('static', filename='uploads/resumes/' + app.student.resume_path) }}" target="_blank">View</a>{% endif %}</td>
+            <td>
+                <form action="{{ url_for('company.update_application_status', id=app.id) }}" method="POST">
+                    <select name="status" class="form-select form-select-sm" onchange="this.form.submit()">
+                        <option value="applied" {% if app.status=='applied' %}selected{% endif %}>Applied</option>
+                        <option value="shortlisted" {% if app.status=='shortlisted' %}selected{% endif %}>Shortlisted</option>
+                        <option value="selected" {% if app.status=='selected' %}selected{% endif %}>Selected</option>
+                        <option value="rejected" {% if app.status=='rejected' %}selected{% endif %}>Rejected</option>
+                    </select>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

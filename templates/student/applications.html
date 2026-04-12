@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<h2>My Applications</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Company</th>
+            <th>Job Title</th>
+            <th>Applied On</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for app in applications %}
+        <tr>
+            <td>{{ app.drive.company.company_name }}</td>
+            <td>{{ app.drive.job_title }}</td>
+            <td>{{ app.application_date.strftime('%Y-%m-%d') }}</td>
+            <td>{{ app.status }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
